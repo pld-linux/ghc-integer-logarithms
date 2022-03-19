@@ -6,7 +6,7 @@
 Summary:	Integer logarithms
 Name:		ghc-%{pkgname}
 Version:	1.0.3
-Release:	1
+Release:	2
 License:	MIT
 Group:		Development/Languages
 #Source0Download: http://hackage.haskell.org/package/integer-logarithms
