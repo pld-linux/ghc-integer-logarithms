@@ -4,6 +4,7 @@
 #
 %define		pkgname	integer-logarithms
 Summary:	Integer logarithms
+Summary(pl.UTF-8):	Logarytmy całkowite
 Name:		ghc-%{pkgname}
 Version:	1.0.3
 Release:	2
@@ -14,13 +15,23 @@ Source0:	http://hackage.haskell.org/package/%{pkgname}-%{version}/%{pkgname}-%{v
 # Source0-md5:	123bd756df01fd700bde26991f8431df
 Patch0:		ghc-8.10.patch
 URL:		http://hackage.haskell.org/package/integer-logarithms
-BuildRequires:	ghc >= 6.12.3
+# ghc < 7.10 requires also ghc-nats >= 1.1.2 < 1.2
+BuildRequires:	ghc >= 7.10
+BuildRequires:	ghc-array >= 0.3
+BuildRequires:	ghc-base >= 4.3
+BuildRequires:	ghc-ghc-prim
 %if %{with prof}
 BuildRequires:	ghc-prof
+BuildRequires:	ghc-array-prof >= 0.3
+BuildRequires:	ghc-base-prof >= 4.3
+BuildRequires:	ghc-ghc-prim-prof
 %endif
 BuildRequires:	rpmbuild(macros) >= 1.608
 %requires_eq	ghc
 Requires(post,postun):	/usr/bin/ghc-pkg
+Requires:	ghc-array >= 0.3
+Requires:	ghc-base >= 4.3
+Requires:	ghc-ghc-prim
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
 # debuginfo is not useful for ghc
@@ -33,12 +44,19 @@ BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 Math.NumberTheory.Logarithms and Math.NumberTheory.Powers.Integer
 from the arithmoi package.
 
+%description -l pl.UTF-8
+Math.NumberTheory.Logarithms oraz Math.NumberTheory.Powers.Integer z
+pakietu arithmoi.
+
 %package prof
 Summary:	Profiling %{pkgname} library for GHC
 Summary(pl.UTF-8):	Biblioteka profilująca %{pkgname} dla GHC
 Group:		Development/Libraries
 Requires:	%{name} = %{version}-%{release}
 Requires:	ghc-prof
+Requires:	ghc-array-prof >= 0.3
+Requires:	ghc-base-prof >= 4.3
+Requires:	ghc-ghc-prim-prof
 
 %description prof
 Profiling %{pkgname} library for GHC.  Should be installed when
@@ -94,7 +112,7 @@ rm -rf $RPM_BUILD_ROOT
 %doc LICENSE changelog.md readme.md %{name}-%{version}-doc/html
 %{_libdir}/%{ghcdir}/package.conf.d/%{pkgname}.conf
 %dir %{_libdir}/%{ghcdir}/%{pkgname}-%{version}
-%{_libdir}/%{ghcdir}/%{pkgname}-%{version}/*.so
+%attr(755,root,root) %{_libdir}/%{ghcdir}/%{pkgname}-%{version}/*.so
 %{_libdir}/%{ghcdir}/%{pkgname}-%{version}/*.a
 %exclude %{_libdir}/%{ghcdir}/%{pkgname}-%{version}/*_p.a
 
